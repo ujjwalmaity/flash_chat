@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "395950813314",
+    "firebase_url": "https://flutter-apps-956d0.firebaseio.com",
+    "project_id": "flutter-apps-956d0",
+    "storage_bucket": "flutter-apps-956d0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:395950813314:android:48c90407ae27fb6574849b",
+        "android_client_info": {
+          "package_name": "dev.ujjwal.flashchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "395950813314-kgt6cbs1gq388lq3pp5n20en8cgbdfam.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.ujjwal.flashchat",
+            "certificate_hash": "226dfd856993b77e5a2bba3a7f4eaccc0cd422bc"
+          }
+        },
+        {
+          "client_id": "395950813314-6lt3l2icvrk2jtv1g382641lrh54umre.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUu3sWVXb752Xtztyo7SYEN2g4t3otUwc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "395950813314-6lt3l2icvrk2jtv1g382641lrh54umre.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
