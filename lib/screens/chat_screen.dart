@@ -32,6 +32,25 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  // Fetching data from Firestore
+  void futureMessages() async {
+    final querySnapshot = await _firestore.collection(MESSAGES_COLLECTION).getDocuments();
+    final documentSnapshot = querySnapshot.documents;
+    for (var document in documentSnapshot) {
+      print(document.data);
+    }
+  }
+
+  // Listening for data from Firestore
+  void streamMessages() async {
+    await for (var querySnapshot in _firestore.collection(MESSAGES_COLLECTION).snapshots()) {
+      final documentSnapshot = querySnapshot.documents;
+      for (var document in documentSnapshot) {
+        print(document.data);
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
