@@ -10,6 +10,7 @@ String userEmail;
 const String MESSAGES_COLLECTION = 'messages';
 const String SENDER_KEY = 'sender';
 const String TEXT_KEY = 'text';
+const String TIME_KEY = 'time';
 
 class ChatScreen extends StatefulWidget {
   static const String id = 'chat_screen';
@@ -107,7 +108,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   FlatButton(
                     onPressed: () {
                       if (messageText == null || messageText.trim().length == 0) return;
-                      _firestore.collection(MESSAGES_COLLECTION).add({TEXT_KEY: messageText.trim(), SENDER_KEY: loggedInUser.email});
+                      _firestore.collection(MESSAGES_COLLECTION).add({TEXT_KEY: messageText.trim(), SENDER_KEY: loggedInUser.email, TIME_KEY: DateTime.now()});
                       _controller.clear();
                       messageText = '';
                     },
@@ -127,10 +128,12 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 class MessagesStream extends StatelessWidget {
+  final _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection(MESSAGES_COLLECTION).snapshots(),
+      stream: _firestore.collection(MESSAGES_COLLECTION).orderBy(TIME_KEY).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData || userEmail == null) {
           return Center(
@@ -140,7 +143,7 @@ class MessagesStream extends StatelessWidget {
           );
         }
         final querySnapshot = snapshot.data;
-        final documentSnapshot = querySnapshot.documents;
+        final documentSnapshot = querySnapshot.documents.reversed;
         List<MessageBubble> messageBubbles = [];
         for (var document in documentSnapshot) {
           final messageText = document.data[TEXT_KEY];
@@ -148,8 +151,13 @@ class MessagesStream extends StatelessWidget {
           final messageBubble = MessageBubble(text: messageText, sender: messageSender, isMe: userEmail == messageSender);
           messageBubbles.add(messageBubble);
         }
+        try {
+          _scrollController.animateTo(0.0, curve: Curves.easeOut, duration: const Duration(milliseconds: 300));
+        } catch (e) {}
         return Expanded(
           child: ListView(
+            reverse: true,
+            controller: _scrollController,
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
             children: messageBubbles,
           ),
