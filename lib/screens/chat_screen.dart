@@ -5,6 +5,7 @@ import 'package:flashchat/constants.dart';
 import 'package:flutter/material.dart';
 
 final _firestore = Firestore.instance;
+String userEmail;
 
 const String MESSAGES_COLLECTION = 'messages';
 const String SENDER_KEY = 'sender';
@@ -29,6 +30,7 @@ class _ChatScreenState extends State<ChatScreen> {
       final user = await _auth.currentUser();
       if (user != null) {
         loggedInUser = user;
+        userEmail = user.email;
       }
     } catch (e) {
       print(e);
@@ -130,7 +132,7 @@ class MessagesStream extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection(MESSAGES_COLLECTION).snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+        if (!snapshot.hasData || userEmail == null) {
           return Center(
             child: CircularProgressIndicator(
               backgroundColor: Colors.lightBlueAccent,
@@ -143,7 +145,7 @@ class MessagesStream extends StatelessWidget {
         for (var document in documentSnapshot) {
           final messageText = document.data[TEXT_KEY];
           final messageSender = document.data[SENDER_KEY];
-          final messageBubble = MessageBubble(text: messageText, sender: messageSender);
+          final messageBubble = MessageBubble(text: messageText, sender: messageSender, isMe: userEmail == messageSender);
           messageBubbles.add(messageBubble);
         }
         return Expanded(
